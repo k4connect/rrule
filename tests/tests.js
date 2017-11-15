@@ -17,6 +17,8 @@ module("RRule", {
         // NOTE: can take a longer time.
         this.ALSO_TEST_BEFORE_AFTER_BETWEEN = true;
 
+        this.ALSO_TEST_SUBSECOND_PRECISION = true;
+
     }
 
 });
@@ -72,7 +74,7 @@ test('fromString()', function() {
 
 
 testRecurring(
-    'missing Feb 28 https://github.com/jakubroztocil/rrule/issues/21',
+    'missing Feb 28 https://github.com/jkbrzt/rrule/issues/21',
     new RRule({
       freq: RRule.MONTHLY,
       dtstart: new Date(2013, 0, 1),
@@ -155,33 +157,7 @@ testRecurring('testBetweenInc',
     ]
 );
 
-test('testBetweenInvalidBefore', function () {
-    var rule = new RRule({freq: RRule.WEEKLY, byweekday: RRule.MO, dtstart: parse("19970902T090000")});
-    assert.throws(
-        function() {
-            rule.between(rule.options.dstart, new Date(undefined), true, function(occurrence, i) {
-                return true;
-            });
-        },
-        function (err) {
-            return err.message === 'Invalid before date';
-        }
-    );
-});
 
-test('testBetweenInvalidAfter', function () {
-    var rule = new RRule({freq: RRule.WEEKLY, byweekday: RRule.MO, dtstart: parse("19970902T090000")});
-    assert.throws(
-        function() {
-            rule.between(new Date(undefined), parse("19970906T090000"), true, function(occurrence, i) {
-                return true;
-            });
-        },
-        function (err) {
-            return err.message === 'Invalid after date';
-        }
-    );
-});
 
 testRecurring('testYearly', new RRule({freq: RRule.YEARLY,
     count:3,
@@ -2285,8 +2261,39 @@ testRecurring('testMaxYear', new RRule({freq: RRule.YEARLY,
     dtstart:parse("99970902T090000")}),
     []);
 
+testRecurring('testSubsecondStartYearly' , new RRule({
+    freq: RRule.YEARLY,
+    count:1,
+    dtstart:new Date(1420063200001)
+    }),
 
+    [new Date(1420063200001)]);
 
+testRecurring('testSubsecondStartMonthlyByMonthDay' , new RRule({
+    
+    freq: RRule.MONTHLY,
+    count: 1,
+    bysetpos: [-1,1] ,   
+    dtstart:new Date(1356991200001)
+    }),
+    [new Date(1356991200001)]);
+
+test('testAfterBefore', function(){
+    "YEARLY,MONTHLY,DAILY,HOURLY,MINUTELY,SECONDLY".split(',').forEach( function (freq_str){
+        var date= new Date(1356991200001);
+        var rr= new RRule({
+                freq:RRule[freq_str],
+                dtstart:date
+            });
+        equal(date.getTime(), rr.options.dtstart.getTime(), "the supplied dtstart differs from RRule.options.dtstart");
+        res=rr.before(rr.after(rr.options.dtstart));
+        if (!(res == null)) {
+            // on purpose ==, so that undefined also matches
+            res=res.getTime();
+        } 
+        equal( res, rr.options.dtstart.getTime(), 'after dtstart , followed by before does not return dtstart');
+    });   
+})
 
 /* these tests basically test the iterator implementation only */
 /*
