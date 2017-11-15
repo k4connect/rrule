@@ -31,13 +31,6 @@ module.exports = function(grunt) {
         },
         src: [TESTS_DIR + '/**/*Spec.coffee']
       }
-    },
-    'node-inspector': {
-      dev: {
-        options: {
-          'hidden': ['node_modules']
-        }
-      }
     }
   });
 
@@ -54,7 +47,6 @@ module.exports = function(grunt) {
     grunt.task.run('docco');
   });
 
-  grunt.registerTask('inspector', 'Runs node-inspector.', ['node-inspector:dev']);
   grunt.registerTask('test:ci', 'Runs tests.', ['mochaTest']);
 
   // FILES
