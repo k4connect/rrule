@@ -1,0 +1,10 @@
+# This file is used to automatically request reviews on PRs.
+
+# These owners will be the default owners for everything in
+# the repo, unless a match on a later line takes precedence.
+# "@k4connect/cloud-platform" below requests review from all members of Cloud Platform.
+*       @k4connect/cloud-platform
+
+# It's also possible to add notifications based on language
+# or location in repo, etc.
+# More info at docs: https://help.github.com/articles/about-codeowners/
