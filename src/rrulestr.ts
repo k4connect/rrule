@@ -11,7 +11,7 @@ export interface RRuleStrOptions {
   unfold: boolean
   forceset: boolean
   compatible: boolean
-  tzid: string | null
+  timezone: string | null
 }
 
 /**
@@ -24,16 +24,16 @@ const DEFAULT_OPTIONS: RRuleStrOptions = {
   unfold: false,
   forceset: false,
   compatible: false,
-  tzid: null
+  timezone: null
 }
 
-export function parseInput (s: string, options: Partial<RRuleStrOptions>) {
+export function parseInput(s: string, options: Partial<RRuleStrOptions>) {
   let rrulevals: Partial<Options>[] = []
   let rdatevals: Date[] = []
   let exrulevals: Partial<Options>[] = []
   let exdatevals: Date[] = []
 
-  let { dtstart, tzid } = parseDtstart(s)
+  let { dtstart, timezone } = parseDtstart(s)
 
   const lines = splitIntoLines(s, options.unfold)
 
@@ -51,9 +51,9 @@ export function parseInput (s: string, options: Partial<RRuleStrOptions>) {
         break
 
       case 'RDATE':
-        const [ _, rdateTzid ] = /RDATE(?:;TZID=([^:=]+))?/i.exec(line)!
-        if (rdateTzid && !tzid) {
-          tzid = rdateTzid
+        const [_, rdateTzid] = /RDATE(?:;TIMZONE=([^:=]+))?/i.exec(line)!
+        if (rdateTzid && !timezone) {
+          timezone = rdateTzid
         }
         rdatevals = rdatevals.concat(parseRDate(value, parms))
         break
@@ -80,7 +80,7 @@ export function parseInput (s: string, options: Partial<RRuleStrOptions>) {
 
   return {
     dtstart,
-    tzid,
+    timezone,
     rrulevals,
     rdatevals,
     exrulevals,
@@ -88,14 +88,14 @@ export function parseInput (s: string, options: Partial<RRuleStrOptions>) {
   }
 }
 
-function buildRule (s: string, options: Partial<RRuleStrOptions>) {
+function buildRule(s: string, options: Partial<RRuleStrOptions>) {
   const {
     rrulevals,
     rdatevals,
     exrulevals,
     exdatevals,
     dtstart,
-    tzid
+    timezone
   } = parseInput(s, options)
 
   const noCache = options.cache === false
@@ -115,12 +115,12 @@ function buildRule (s: string, options: Partial<RRuleStrOptions>) {
     const rset = new RRuleSet(noCache)
 
     rset.dtstart(dtstart)
-    rset.tzid(tzid || undefined)
+    rset.timezone(timezone || undefined)
 
     rrulevals.forEach(val => {
       rset.rrule(
         new RRule(
-          groomRruleOptions(val, dtstart, tzid),
+          groomRruleOptions(val, dtstart, timezone),
           noCache
         )
       )
@@ -133,7 +133,7 @@ function buildRule (s: string, options: Partial<RRuleStrOptions>) {
     exrulevals.forEach(val => {
       rset.exrule(
         new RRule(
-          groomRruleOptions(val, dtstart, tzid),
+          groomRruleOptions(val, dtstart, timezone),
           noCache
         )
       )
@@ -151,26 +151,26 @@ function buildRule (s: string, options: Partial<RRuleStrOptions>) {
   return new RRule(groomRruleOptions(
     val,
     val.dtstart || options.dtstart || dtstart,
-    val.tzid || options.tzid || tzid
+    val.timezone || options.timezone || timezone
   ), noCache)
 }
 
-export function rrulestr (
+export function rrulestr(
   s: string,
   options: Partial<RRuleStrOptions> = {}
 ): RRule | RRuleSet {
   return buildRule(s, initializeOptions(options))
 }
 
-function groomRruleOptions (val: Partial<Options>, dtstart?: Date | null, tzid?: string | null) {
+function groomRruleOptions(val: Partial<Options>, dtstart?: Date | null, timezone?: string | null) {
   return {
     ...val,
     dtstart,
-    tzid
+    timezone
   }
 }
 
-function initializeOptions (options: Partial<RRuleStrOptions>) {
+function initializeOptions(options: Partial<RRuleStrOptions>) {
   const invalid: string[] = []
   const keys = Object.keys(options) as (keyof typeof options)[]
   const defaultKeys = Object.keys(
@@ -188,7 +188,7 @@ function initializeOptions (options: Partial<RRuleStrOptions>) {
   return { ...DEFAULT_OPTIONS, ...options }
 }
 
-function extractName (line: string) {
+function extractName(line: string) {
   if (line.indexOf(':') === -1) {
     return {
       name: 'RRULE',
@@ -203,7 +203,7 @@ function extractName (line: string) {
   }
 }
 
-function breakDownLine (line: string) {
+function breakDownLine(line: string) {
   const { name, value } = extractName(line)
   let parms = name.split(';')
   if (!parms) throw new Error('empty property name')
@@ -215,7 +215,7 @@ function breakDownLine (line: string) {
   }
 }
 
-function splitIntoLines (s: string, unfold = false) {
+function splitIntoLines(s: string, unfold = false) {
   s = s && s.trim()
   if (!s) throw new Error('Invalid empty string')
 
@@ -243,15 +243,15 @@ function splitIntoLines (s: string, unfold = false) {
   return lines
 }
 
-function validateDateParm (parms: string[]) {
+function validateDateParm(parms: string[]) {
   parms.forEach(parm => {
-    if (!/(VALUE=DATE(-TIME)?)|(TZID=)/.test(parm)) {
+    if (!/(VALUE=DATE(-TIME)?)|(TIMZONE=)/.test(parm)) {
       throw new Error('unsupported RDATE/EXDATE parm: ' + parm)
     }
   })
 }
 
-function parseRDate (rdateval: string, parms: string[]) {
+function parseRDate(rdateval: string, parms: string[]) {
   validateDateParm(parms)
 
   return rdateval

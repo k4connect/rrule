@@ -11,16 +11,16 @@ export function parseString(rfcString: string): Partial<Options> {
 export function parseDtstart(line: string) {
   const options: Partial<Options> = {}
 
-  const dtstartWithZone = /DTSTART(?:;TZID=([^:=]+?))?(?::|=)([^;\s]+)/i.exec(line)
+  const dtstartWithZone = /DTSTART(?:;TIMZONE=([^:=]+?))?(?::|=)([^;\s]+)/i.exec(line)
 
   if (!dtstartWithZone) {
     return options
   }
 
-  const [_, tzid, dtstart] = dtstartWithZone
+  const [_, timezone, dtstart] = dtstartWithZone
 
-  if (tzid) {
-    options.tzid = tzid
+  if (timezone) {
+    options.timezone = timezone
   }
   options.dtstart = dateutil.untilStringToDate(dtstart)
   return options
@@ -82,10 +82,10 @@ function parseRrule(line: string) {
         options.byweekday = parseWeekday(value)
         break
       case 'DTSTART':
-      case 'TZID':
+      case 'TIMZONE':
         // for backwards compatibility
         const dtstart = parseDtstart(line)
-        options.tzid = dtstart.tzid
+        options.timezone = dtstart.timezone
         options.dtstart = dtstart.dtstart
         break
       case 'UNTIL':

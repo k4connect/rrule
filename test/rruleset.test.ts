@@ -396,14 +396,14 @@ describe('RRuleSet', function () {
       ])
     })
 
-    it('generates rules with tzid', () => {
+    it('generates rules with timezone', () => {
       const set = new RRuleSet()
 
       set.rrule(new RRule({
         freq: RRule.YEARLY,
         count: 2,
         dtstart: parse('19600101T090000'),
-        tzid: 'America/New_York'
+        timezone: 'America/New_York'
       }))
 
       set.rrule(new RRule({
@@ -412,20 +412,20 @@ describe('RRuleSet', function () {
       }))
 
       expect(set.valueOf()).to.deep.equal([
-        "DTSTART;TZID=America/New_York:19600101T090000",
+        "DTSTART;TIMZONE=America/New_York:19600101T090000",
         "RRULE:FREQ=YEARLY;COUNT=2",
         "RRULE:FREQ=WEEKLY;COUNT=3"
       ])
     })
 
-    it('generates a value with RDATE with tzid', () => {
+    it('generates a value with RDATE with timezone', () => {
       const set = new RRuleSet()
 
       set.rrule(new RRule({
         freq: RRule.YEARLY,
         count: 2,
         dtstart: parse('19600101T090000'),
-        tzid: 'America/New_York'
+        timezone: 'America/New_York'
       }))
 
       set.rdate(
@@ -437,16 +437,16 @@ describe('RRuleSet', function () {
       )
 
       expect(set.valueOf()).to.deep.equal([
-        "DTSTART;TZID=America/New_York:19600101T090000",
+        "DTSTART;TIMZONE=America/New_York:19600101T090000",
         "RRULE:FREQ=YEARLY;COUNT=2",
-        "RDATE;TZID=America/New_York:19610201T090000,19610301T090000"
+        "RDATE;TIMZONE=America/New_York:19610201T090000,19610301T090000"
       ])
     })
 
-    it('generates a string with RDATE with TZID when no RRULE is present', () => {
+    it('generates a string with RDATE with TIMZONE when no RRULE is present', () => {
       const set = new RRuleSet()
 
-      set.tzid('America/New_York')
+      set.timezone('America/New_York')
 
       set.rdate(
         parse('19610201T090000'),
@@ -457,14 +457,14 @@ describe('RRuleSet', function () {
       )
 
       expect(set.toString()).to.deep.equal(
-        "RDATE;TZID=America/New_York:19610201T090000,19610301T090000"
+        "RDATE;TIMZONE=America/New_York:19610201T090000,19610301T090000"
       )
     })
 
     it('generates a string with RDATE in UTC when no RRULE is present', () => {
       const set = new RRuleSet()
 
-      set.tzid('UTC')
+      set.timezone('UTC')
 
       set.rdate(
         parse('19610201T090000'),
@@ -480,19 +480,19 @@ describe('RRuleSet', function () {
     })
 
     it('parses RDATE strings without an RRULE', () => {
-      const set = rrulestr("RDATE;TZID=America/New_York:19610201T090000,19610301T090000") as RRuleSet
+      const set = rrulestr("RDATE;TIMZONE=America/New_York:19610201T090000,19610301T090000") as RRuleSet
       expect(set).to.be.instanceof(RRuleSet)
-      expect(set.tzid()).to.equal('America/New_York')
+      expect(set.timezone()).to.equal('America/New_York')
     })
 
-    it('generates EXDATE with tzid', () => {
+    it('generates EXDATE with timezone', () => {
       const set = new RRuleSet()
 
       set.rrule(new RRule({
         freq: RRule.YEARLY,
         count: 2,
         dtstart: parse('19600101T090000'),
-        tzid: 'America/New_York'
+        timezone: 'America/New_York'
       }))
 
       set.exdate(
@@ -504,13 +504,13 @@ describe('RRuleSet', function () {
       )
 
       expect(set.valueOf()).to.deep.equal([
-        "DTSTART;TZID=America/New_York:19600101T090000",
+        "DTSTART;TIMZONE=America/New_York:19600101T090000",
         "RRULE:FREQ=YEARLY;COUNT=2",
-        "EXDATE;TZID=America/New_York:19610201T090000,19610301T090000"
+        "EXDATE;TIMZONE=America/New_York:19610201T090000,19610301T090000"
       ])
     })
 
-    it('generates correcty zoned recurrences when a tzid is present', () => {
+    it('generates correcty zoned recurrences when a timezone is present', () => {
       const targetZone = 'America/New_York'
       const currentLocalDate = DateTime.local(2000, 2, 6, 11, 0, 0)
       setMockDate(currentLocalDate.toJSDate())
@@ -521,7 +521,7 @@ describe('RRuleSet', function () {
         freq: RRule.YEARLY,
         count: 4,
         dtstart: DateTime.fromISO('20000101T090000').toJSDate(),
-        tzid: targetZone
+        timezone: targetZone
       }))
 
       set.exdate(
@@ -530,7 +530,7 @@ describe('RRuleSet', function () {
 
       set.rdate(
         DateTime.fromISO('20020301T090000').toJSDate(),
-      )     
+      )
 
       expect(set.all()).to.deep.equal([
         expectedDate(DateTime.fromISO('20000101T090000'), currentLocalDate, targetZone),
@@ -544,24 +544,24 @@ describe('RRuleSet', function () {
 
     it('permits only an rdate with a timezone', () => {
       const set = new RRuleSet()
-      set.tzid('America/Los_Angeles')
+      set.timezone('America/Los_Angeles')
       set.rdate(new Date(Date.UTC(2010, 10, 10, 10, 0, 0)))
 
-      expect(set.valueOf()).to.deep.equal(['RDATE;TZID=America/Los_Angeles:20101110T100000'])
-      expect(set.toString()).to.equal('RDATE;TZID=America/Los_Angeles:20101110T100000')
+      expect(set.valueOf()).to.deep.equal(['RDATE;TIMZONE=America/Los_Angeles:20101110T100000'])
+      expect(set.toString()).to.equal('RDATE;TIMZONE=America/Los_Angeles:20101110T100000')
 
       const set2 = rrulestr(set.toString())
-      expect(set2.toString()).to.equal('RDATE;TZID=America/Los_Angeles:20101110T100000')
+      expect(set2.toString()).to.equal('RDATE;TIMZONE=America/Los_Angeles:20101110T100000')
     })
 
-    it('generates correcty zoned recurrences when a tzid is present but no rrule is present', () => {
+    it('generates correcty zoned recurrences when a timezone is present but no rrule is present', () => {
       const targetZone = 'America/New_York'
       const currentLocalDate = DateTime.local(2000, 2, 6, 11, 0, 0)
       setMockDate(currentLocalDate.toJSDate())
 
       const set = new RRuleSet()
 
-      set.tzid(targetZone)
+      set.timezone(targetZone)
 
       set.rdate(
         DateTime.fromISO('20020301T090000').toJSDate(),
@@ -640,15 +640,15 @@ describe('RRuleSet', function () {
 
     it('handles rule in a timezone', () => {
       const legacy = [
-        'RRULE:DTSTART;TZID=America/New_York:20171201T080000;FREQ=WEEKLY',
+        'RRULE:DTSTART;TIMZONE=America/New_York:20171201T080000;FREQ=WEEKLY',
       ]
       const original = [
-        'DTSTART;TZID=America/New_York:20171201T080000',
+        'DTSTART;TIMZONE=America/New_York:20171201T080000',
         'RRULE:FREQ=WEEKLY',
       ]
 
       expectRecurrence([original, legacy]).toBeUpdatedWithEndDate([
-        'DTSTART;TZID=America/New_York:20171201T080000',
+        'DTSTART;TIMZONE=America/New_York:20171201T080000',
         'RRULE:FREQ=WEEKLY;UNTIL=20171224T235959',
       ].join('\n'))
     })
@@ -663,9 +663,9 @@ describe('RRuleSet', function () {
 
       const newRuleSet = new RRuleSet()
       const rule = new RRule({
-          ...rrule.origOptions,
-          until: newEndDate.toJSDate(),
-        })
+        ...rrule.origOptions,
+        until: newEndDate.toJSDate(),
+      })
 
       newRuleSet.rrule(rule)
 
@@ -714,12 +714,12 @@ describe('RRuleSet', function () {
     }
   })
 
-  it('generates invalid date objects on an rruleset with invalid TZID and exdate', () => {
+  it('generates invalid date objects on an rruleset with invalid TIMZONE and exdate', () => {
     const set = new RRuleSet()
     set.rrule(new RRule({
       count: 1,
       dtstart: parse('19970902T090000'),
-      tzid: 'America/Unknown'
+      timezone: 'America/Unknown'
     }))
     set.exdate(parse('19970902T090000'))
 
@@ -749,20 +749,20 @@ describe('RRuleSet', function () {
         freq: RRule.YEARLY,
         count: 2,
         dtstart: parse('19600101T090000'),
-        tzid: 'America/New_York'
+        timezone: 'America/New_York'
       });
       set.rrule(rrule);
 
       expect(set.rrules().map(e => e.toString())).eql([rrule.toString()]);
     });
-    
+
     it('exrules()', () => {
       let set = new RRuleSet();
       let rrule = new RRule({
         freq: RRule.YEARLY,
         count: 2,
         dtstart: parse('19600101T090000'),
-        tzid: 'America/New_York'
+        timezone: 'America/New_York'
       });
       set.exrule(rrule);
 
@@ -773,7 +773,7 @@ describe('RRuleSet', function () {
       let set = new RRuleSet();
       let dt = parse('19610201T090000');
       set.rdate(dt);
-      
+
       expect(set.rdates()).eql([dt]);
     });
 

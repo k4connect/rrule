@@ -12,7 +12,7 @@ export function optionsToString (options: Partial<Options>) {
   const defaultKeys = Object.keys(DEFAULT_OPTIONS)
 
   for (let i = 0; i < keys.length; i++) {
-    if (keys[i] === 'tzid') continue
+    if (keys[i] === 'timezone') continue
     if (!includes(defaultKeys, keys[i])) continue
 
     let key = keys[i].toUpperCase()
@@ -59,11 +59,11 @@ export function optionsToString (options: Partial<Options>) {
 
         break
       case 'DTSTART':
-        dtstart = buildDtstart(value, options.tzid)
+        dtstart = buildDtstart(value, options.timezone)
         break
 
       case 'UNTIL':
-        outValue = dateutil.timeToUntilString(value, !options.tzid)
+        outValue = dateutil.timeToUntilString(value, !options.timezone)
         break
 
       default:
@@ -92,10 +92,10 @@ export function optionsToString (options: Partial<Options>) {
   return [ dtstart, ruleString ].filter(x => !!x).join('\n')
 }
 
-function buildDtstart (dtstart?: number, tzid?: string | null) {
+function buildDtstart (dtstart?: number, timezone?: string | null) {
   if (!dtstart) {
     return ''
   }
 
-  return 'DTSTART' + new DateWithZone(new Date(dtstart), tzid).toString()
+  return 'DTSTART' + new DateWithZone(new Date(dtstart), timezone).toString()
 }

@@ -3661,7 +3661,7 @@ describe('RRule', function () {
       const rule = new RRule({
         dtstart,
         count: 1,
-        tzid: targetZone
+        timezone: targetZone
       })
       const recurrence = rule.all()[0]
       const expected = expectedDate(startDate, currentLocalDate, targetZone)
@@ -3681,7 +3681,7 @@ describe('RRule', function () {
       const rule = new RRule({
         dtstart,
         count: 1,
-        tzid: targetZone
+        timezone: targetZone
       })
       const recurrence = rule.all()[0]
       const expected = expectedDate(startDate, currentLocalDate, targetZone)
@@ -3701,7 +3701,7 @@ describe('RRule', function () {
       const rule = new RRule({
         dtstart,
         count: 1,
-        tzid: targetZone
+        timezone: targetZone
       })
       const recurrence = rule.after(new Date(0))
       const expected = expectedDate(startDate, currentLocalDate, targetZone)

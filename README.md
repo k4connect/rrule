@@ -174,7 +174,7 @@ For example:
 ```ts
 // local machine zone is America/Los_Angeles
 const rule = RRule.fromString(
-  "DTSTART;TZID=America/Denver:20181101T190000;\n"
+  "DTSTART;TIMZONE=America/Denver:20181101T190000;\n"
   + "RRULE:FREQ=WEEKLY;BYDAY=MO,WE,TH;INTERVAL=1;COUNT=3"
 )
 rule.all()
@@ -214,19 +214,19 @@ For more examples see
 
 ### Timezone Support
 
-Optionally, it also supports use of the `TZID` parameter in the
+Optionally, it also supports use of the `TIMZONE` parameter in the
 [RFC](https://tools.ietf.org/html/rfc5545#section-3.2.19)
 when the [Luxon](https://github.com/moment/luxon) library is provided. The 
 [specification](https://moment.github.io/luxon/docs/manual/zones.html#specifying-a-zone)
 and [support matrix](https://moment.github.io/luxon/docs/manual/matrix.html) for Luxon apply.
 
-Example with `TZID`:
+Example with `TIMZONE`:
 
 ```js
 new RRule({
   dtstart: new Date(Date.UTC(2018, 1, 1, 10, 30)),
   count: 1,
-  tzid: 'Asia/Tokyo'
+  timezone: 'Asia/Tokyo'
 }).all()
 
 // assuming the system timezone is set to America/Los_Angeles, you get:
@@ -234,7 +234,7 @@ new RRule({
 // which is the time in Los Angeles when it's 2018-02-01T10:30:00 in Tokyo.
 ```
 
-Whether or not you use the `TZID` param, make sure to only use JS `Date` objects that are
+Whether or not you use the `TIMZONE` param, make sure to only use JS `Date` objects that are
 represented in UTC to avoid unexpected timezone offsets being applied, for example:
 
 ```js
@@ -334,7 +334,7 @@ iCalendar RFC. Only `freq` is required.
         </td>
     </tr>
     <tr>
-      <td><code>tzid</code></td>
+      <td><code>timezone</code></td>
       <td>If given, this must be a string <a href="https://moment.github.io/luxon/docs/manual/zones.html#specifying-a-zone">supported</a>
       by Luxon, and the <a href="https://moment.github.io/luxon/">Luxon</a> library must be provided. See
       discussion under <a href="#timezone-support">Timezone support</a>.
@@ -659,7 +659,7 @@ Include the given datetime instance in the recurrence set exclusion list. Dates
 included that way will not be generated, even if some inclusive rrule or
 rdate matches them.
 
-##### `RRuleSet.prototype.tzid(tz?)`
+##### `RRuleSet.prototype.timezone(tz?)`
 Sets or overrides the timezone identifier. Useful if there are no rrules in this
 RRuleSet and thus no DTSTART.
 
@@ -731,8 +731,8 @@ If set to True, the parser will operate in RFC-compatible mode. Right now it
 means that unfold will be turned on, and if a DTSTART is found, it will be
 considered the first recurrence instance, as documented in the RFC.
 
-`tzid`
-If given, it must be a string that will be used when no `TZID` property is found
+`timezone`
+If given, it must be a string that will be used when no `TIMZONE` property is found
 in the parsed string. If it is not given, and the property is not found, `'UTC'`
 will be used by default.
 

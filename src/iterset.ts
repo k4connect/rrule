@@ -11,7 +11,7 @@ export function iterSet <M extends QueryMethodTypes> (
   _exrule: RRule[],
   _rdate: Date[],
   _exdate: Date[],
-  tzid: string | undefined
+  timezone: string | undefined
 ) {
   const _exdateHash: { [k: number]: boolean } = {}
   const _accept = iterResult.accept
@@ -25,7 +25,7 @@ export function iterSet <M extends QueryMethodTypes> (
   }
 
   _exdate.forEach(function (date) {
-    const zonedDate = new DateWithZone(date, tzid).rezonedDate()
+    const zonedDate = new DateWithZone(date, timezone).rezonedDate()
     _exdateHash[Number(zonedDate)] = true
   })
 
@@ -55,7 +55,7 @@ export function iterSet <M extends QueryMethodTypes> (
   }
 
   for (let i = 0; i < _rdate.length; i++) {
-    const zonedDate = new DateWithZone(_rdate[i], tzid).rezonedDate()
+    const zonedDate = new DateWithZone(_rdate[i], timezone).rezonedDate()
     if (!iterResult.accept(new Date(zonedDate.getTime()))) break
   }
 

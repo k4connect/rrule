@@ -212,7 +212,7 @@ $(function () {
               options[key] = i
               continue
 
-            case 'tzid':
+            case 'timezone':
               options[key] = value as string
               continue
 

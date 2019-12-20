@@ -2,16 +2,16 @@ import { parseOptions } from '../src/parseoptions'
 import { expect } from 'chai'
 import RRule from '../src'
 
-describe('TZID', () => {
+describe('TIMZONE', () => {
   it('leaves null when null', () => {
-    const options = parseOptions({ tzid: null })
+    const options = parseOptions({ timezone: null })
     // tslint:disable-next-line:no-unused-expression
-    expect(options.parsedOptions.tzid).to.be.null
+    expect(options.parsedOptions.timezone).to.be.null
   })
 
   it('uses a string when passed in', () => {
-    const options = parseOptions({ tzid: 'America/Los_Angeles' })
-    expect(options.parsedOptions.tzid).to.equal('America/Los_Angeles')
+    const options = parseOptions({ timezone: 'America/Los_Angeles' })
+    expect(options.parsedOptions.timezone).to.equal('America/Los_Angeles')
   })
 })
 

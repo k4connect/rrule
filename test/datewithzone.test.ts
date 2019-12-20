@@ -5,17 +5,17 @@ import { set as setMockDate, reset as resetMockDate } from 'mockdate'
 import { expectedDate } from "./lib/utils";
 
 describe('toString', () => {
-  it('returns the date when no tzid is present', () => {
+  it('returns the date when no timezone is present', () => {
     const dt = new DateWithZone(new Date(Date.UTC(2010, 9, 5, 11, 0, 0)))
     expect(dt.toString()).to.equal(':20101005T110000Z')
 
     const dt2 = new DateWithZone(new Date(Date.UTC(2010, 9, 5, 11, 0, 0)), 'UTC')
     expect(dt2.toString()).to.equal(':20101005T110000Z')
-   })
+  })
 
-  it('returns the date with tzid when present', () => {
+  it('returns the date with timezone when present', () => {
     const dt = new DateWithZone(new Date(Date.UTC(2010, 9, 5, 11, 0, 0)), 'Asia/Tokyo')
-    expect(dt.toString()).to.equal(';TZID=Asia/Tokyo:20101005T110000')
+    expect(dt.toString()).to.equal(';TIMZONE=Asia/Tokyo:20101005T110000')
   })
 })
 

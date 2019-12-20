@@ -147,7 +147,7 @@ function isFiltered (
 }
 
 function rezoneIfNeeded (date: Date, options: ParsedOptions) {
-  return new DateWithZone(date, options.tzid).rezonedDate()
+  return new DateWithZone(date, options.timezone).rezonedDate()
 }
 
 function emitResult <M extends QueryMethodTypes> (iterResult: IterResult<M>) {
