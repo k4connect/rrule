@@ -59,7 +59,8 @@ export const DEFAULT_OPTIONS: Options = {
   byhour: null,
   byminute: null,
   bysecond: null,
-  byeaster: null
+  byeaster: null,
+  duration: null
 }
 
 export const defaultKeys = Object.keys(DEFAULT_OPTIONS) as (keyof Options)[]
@@ -129,7 +130,7 @@ export default class RRule implements QueryMethods {
 
   static optionsToString = optionsToString
 
-  protected _iter <M extends QueryMethodTypes> (iterResult: IterResult<M>): IterResultType<M> {
+  protected _iter<M extends QueryMethodTypes> (iterResult: IterResult<M>): IterResultType<M> {
     return iter(iterResult, this.options)
   }
 

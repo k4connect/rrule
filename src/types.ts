@@ -44,6 +44,7 @@ export interface Options {
   byminute: number | number[] | null
   bysecond: number | number[] | null
   byeaster: number | null
+  duration: number | null
 }
 
 export interface ParsedOptions extends Options {
