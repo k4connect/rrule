@@ -8,10 +8,10 @@
     - Validate date inputs (#281)
 - 2.5.5 (2018-09-06)
   - Bugfixes:
-    - Don't emit `RDATE;TIMZONE=UTC` for rdates
+    - Don't emit `RDATE;TIMEZONE=UTC` for rdates
 - 2.5.3 (2018-09-06)
   - Bugfixes:
-    - Prevented emitting `DTSTART;TIMZONE=UTC` when UTC is explicitly set as timezone
+    - Prevented emitting `DTSTART;TIMEZONE=UTC` when UTC is explicitly set as timezone
 - 2.5.2 (2018-09-05)
   - Bugfixes:
     - Permitted RRuleSets with no rrules to have timezone
@@ -25,7 +25,7 @@
     - Fixed RRULE parsing issue (#266)
 - 2.4.0 (2018-08-16)
   - Features:
-    - Implement `TIMZONE` support (#38, #261)
+    - Implement `TIMEZONE` support (#38, #261)
   - Bugfixes:
     - Fixed an error in Typescript output (#264)
 - 2.3.6 (2018-08-14)

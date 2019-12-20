@@ -217,7 +217,7 @@ function _addDate(date: Date, collection: Date[]) {
 
 function rdatesToString(param: string, rdates: Date[], timezone: string | undefined) {
   const isUTC = !timezone || timezone.toUpperCase() === 'UTC'
-  const header = isUTC ? `${param}:` : `${param};TIMZONE=${timezone}:`
+  const header = isUTC ? `${param}:` : `${param};TIMEZONE=${timezone}:`
 
   const dateString = rdates
     .map(rdate => dateutil.timeToUntilString(rdate.valueOf(), isUTC))

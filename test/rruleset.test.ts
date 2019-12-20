@@ -412,7 +412,7 @@ describe('RRuleSet', function () {
       }))
 
       expect(set.valueOf()).to.deep.equal([
-        "DTSTART;TIMZONE=America/New_York:19600101T090000",
+        "DTSTART;TIMEZONE=America/New_York:19600101T090000",
         "RRULE:FREQ=YEARLY;COUNT=2",
         "RRULE:FREQ=WEEKLY;COUNT=3"
       ])
@@ -437,13 +437,13 @@ describe('RRuleSet', function () {
       )
 
       expect(set.valueOf()).to.deep.equal([
-        "DTSTART;TIMZONE=America/New_York:19600101T090000",
+        "DTSTART;TIMEZONE=America/New_York:19600101T090000",
         "RRULE:FREQ=YEARLY;COUNT=2",
-        "RDATE;TIMZONE=America/New_York:19610201T090000,19610301T090000"
+        "RDATE;TIMEZONE=America/New_York:19610201T090000,19610301T090000"
       ])
     })
 
-    it('generates a string with RDATE with TIMZONE when no RRULE is present', () => {
+    it('generates a string with RDATE with TIMEZONE when no RRULE is present', () => {
       const set = new RRuleSet()
 
       set.timezone('America/New_York')
@@ -457,7 +457,7 @@ describe('RRuleSet', function () {
       )
 
       expect(set.toString()).to.deep.equal(
-        "RDATE;TIMZONE=America/New_York:19610201T090000,19610301T090000"
+        "RDATE;TIMEZONE=America/New_York:19610201T090000,19610301T090000"
       )
     })
 
@@ -480,7 +480,7 @@ describe('RRuleSet', function () {
     })
 
     it('parses RDATE strings without an RRULE', () => {
-      const set = rrulestr("RDATE;TIMZONE=America/New_York:19610201T090000,19610301T090000") as RRuleSet
+      const set = rrulestr("RDATE;TIMEZONE=America/New_York:19610201T090000,19610301T090000") as RRuleSet
       expect(set).to.be.instanceof(RRuleSet)
       expect(set.timezone()).to.equal('America/New_York')
     })
@@ -504,9 +504,9 @@ describe('RRuleSet', function () {
       )
 
       expect(set.valueOf()).to.deep.equal([
-        "DTSTART;TIMZONE=America/New_York:19600101T090000",
+        "DTSTART;TIMEZONE=America/New_York:19600101T090000",
         "RRULE:FREQ=YEARLY;COUNT=2",
-        "EXDATE;TIMZONE=America/New_York:19610201T090000,19610301T090000"
+        "EXDATE;TIMEZONE=America/New_York:19610201T090000,19610301T090000"
       ])
     })
 
@@ -547,11 +547,11 @@ describe('RRuleSet', function () {
       set.timezone('America/Los_Angeles')
       set.rdate(new Date(Date.UTC(2010, 10, 10, 10, 0, 0)))
 
-      expect(set.valueOf()).to.deep.equal(['RDATE;TIMZONE=America/Los_Angeles:20101110T100000'])
-      expect(set.toString()).to.equal('RDATE;TIMZONE=America/Los_Angeles:20101110T100000')
+      expect(set.valueOf()).to.deep.equal(['RDATE;TIMEZONE=America/Los_Angeles:20101110T100000'])
+      expect(set.toString()).to.equal('RDATE;TIMEZONE=America/Los_Angeles:20101110T100000')
 
       const set2 = rrulestr(set.toString())
-      expect(set2.toString()).to.equal('RDATE;TIMZONE=America/Los_Angeles:20101110T100000')
+      expect(set2.toString()).to.equal('RDATE;TIMEZONE=America/Los_Angeles:20101110T100000')
     })
 
     it('generates correcty zoned recurrences when a timezone is present but no rrule is present', () => {
@@ -640,15 +640,15 @@ describe('RRuleSet', function () {
 
     it('handles rule in a timezone', () => {
       const legacy = [
-        'RRULE:DTSTART;TIMZONE=America/New_York:20171201T080000;FREQ=WEEKLY',
+        'RRULE:DTSTART;TIMEZONE=America/New_York:20171201T080000;FREQ=WEEKLY',
       ]
       const original = [
-        'DTSTART;TIMZONE=America/New_York:20171201T080000',
+        'DTSTART;TIMEZONE=America/New_York:20171201T080000',
         'RRULE:FREQ=WEEKLY',
       ]
 
       expectRecurrence([original, legacy]).toBeUpdatedWithEndDate([
-        'DTSTART;TIMZONE=America/New_York:20171201T080000',
+        'DTSTART;TIMEZONE=America/New_York:20171201T080000',
         'RRULE:FREQ=WEEKLY;UNTIL=20171224T235959',
       ].join('\n'))
     })
@@ -714,7 +714,7 @@ describe('RRuleSet', function () {
     }
   })
 
-  it('generates invalid date objects on an rruleset with invalid TIMZONE and exdate', () => {
+  it('generates invalid date objects on an rruleset with invalid TIMEZONE and exdate', () => {
     const set = new RRuleSet()
     set.rrule(new RRule({
       count: 1,

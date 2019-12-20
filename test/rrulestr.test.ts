@@ -277,7 +277,7 @@ describe('rrulestr', function () {
     ]
   )
 
-  it('parses without TIMZONE', () => {
+  it('parses without TIMEZONE', () => {
     const rrule = rrulestr(
       'DTSTART:19970902T090000\nRRULE:FREQ=WEEKLY'
     )
@@ -288,9 +288,9 @@ describe('rrulestr', function () {
     })
   })
 
-  it('parses TIMZONE', () => {
+  it('parses TIMEZONE', () => {
     const rrule = rrulestr(
-      'DTSTART;TIMZONE=America/New_York:19970902T090000\n' +
+      'DTSTART;TIMEZONE=America/New_York:19970902T090000\n' +
       'RRULE:FREQ=DAILY;UNTIL=19980902T090000'
     )
 
@@ -315,9 +315,9 @@ describe('rrulestr', function () {
     })
   })
 
-  it('parses a DTSTART with a TIMZONE inside an RRULE', () => {
+  it('parses a DTSTART with a TIMEZONE inside an RRULE', () => {
     const rrule = rrulestr(
-      'RRULE:UNTIL=19990404T110000Z;DTSTART;TIMZONE=America/New_York:19990104T110000Z;FREQ=WEEKLY;BYDAY=TU,WE'
+      'RRULE:UNTIL=19990404T110000Z;DTSTART;TIMEZONE=America/New_York:19990104T110000Z;FREQ=WEEKLY;BYDAY=TU,WE'
     )
 
     expect(rrule.options).to.deep.include({
@@ -331,7 +331,7 @@ describe('rrulestr', function () {
 
   it('parses a DTSTART if it is the first param', () => {
     const rrule = rrulestr(
-      "RRULE:DTSTART;TIMZONE=America/Los_Angeles:20180719T111500;FREQ=DAILY;INTERVAL=1"
+      "RRULE:DTSTART;TIMEZONE=America/Los_Angeles:20180719T111500;FREQ=DAILY;INTERVAL=1"
     )
 
     expect(rrule.options).to.deep.include({
@@ -342,7 +342,7 @@ describe('rrulestr', function () {
     })
   })
 
-  it('parses an RDATE with no TIMZONE param', () => {
+  it('parses an RDATE with no TIMEZONE param', () => {
     const rruleset = rrulestr(
       "DTSTART:20180719T111500Z\n" +
       "RRULE:FREQ=DAILY;INTERVAL=1\n" +
@@ -358,19 +358,19 @@ describe('rrulestr', function () {
     ])
   })
 
-  it('parses an RDATE with a TIMZONE param', () => {
+  it('parses an RDATE with a TIMEZONE param', () => {
     const rruleset = rrulestr(
-      "DTSTART;TIMZONE=America/Los_Angeles:20180719T111500\n" +
+      "DTSTART;TIMEZONE=America/Los_Angeles:20180719T111500\n" +
       "RRULE:FREQ=DAILY;INTERVAL=1\n" +
-      "RDATE;TIMZONE=America/Los_Angeles:20180720T111500\n" +
-      "EXDATE;TIMZONE=America/Los_Angeles:20180721T111500"
+      "RDATE;TIMEZONE=America/Los_Angeles:20180720T111500\n" +
+      "EXDATE;TIMEZONE=America/Los_Angeles:20180721T111500"
     ) as RRuleSet
 
     expect(rruleset.valueOf()).to.deep.equal([
-      "DTSTART;TIMZONE=America/Los_Angeles:20180719T111500",
+      "DTSTART;TIMEZONE=America/Los_Angeles:20180719T111500",
       "RRULE:FREQ=DAILY;INTERVAL=1",
-      "RDATE;TIMZONE=America/Los_Angeles:20180720T111500",
-      "EXDATE;TIMZONE=America/Los_Angeles:20180721T111500"
+      "RDATE;TIMEZONE=America/Los_Angeles:20180720T111500",
+      "EXDATE;TIMEZONE=America/Los_Angeles:20180721T111500"
     ])
   })
 })
@@ -378,7 +378,7 @@ describe('rrulestr', function () {
 describe('parseInput', () => {
   it('parses an input into a structure', () => {
     const output = parseInput(
-      'DTSTART;TIMZONE=America/New_York:19970902T090000\n' +
+      'DTSTART;TIMEZONE=America/New_York:19970902T090000\n' +
       'RRULE:FREQ=DAILY;UNTIL=19980902T090000;INTERVAL=1\n' +
       'RDATE:19970902T090000Z\n' +
       'RDATE:19970904T090000Z\n' +

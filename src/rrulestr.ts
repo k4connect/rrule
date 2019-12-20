@@ -51,7 +51,7 @@ export function parseInput(s: string, options: Partial<RRuleStrOptions>) {
         break
 
       case 'RDATE':
-        const [_, rdateTzid] = /RDATE(?:;TIMZONE=([^:=]+))?/i.exec(line)!
+        const [_, rdateTzid] = /RDATE(?:;TIMEZONE=([^:=]+))?/i.exec(line)!
         if (rdateTzid && !timezone) {
           timezone = rdateTzid
         }
@@ -245,7 +245,7 @@ function splitIntoLines(s: string, unfold = false) {
 
 function validateDateParm(parms: string[]) {
   parms.forEach(parm => {
-    if (!/(VALUE=DATE(-TIME)?)|(TIMZONE=)/.test(parm)) {
+    if (!/(VALUE=DATE(-TIME)?)|(TIMEZONE=)/.test(parm)) {
       throw new Error('unsupported RDATE/EXDATE parm: ' + parm)
     }
   })

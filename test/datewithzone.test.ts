@@ -15,7 +15,7 @@ describe('toString', () => {
 
   it('returns the date with timezone when present', () => {
     const dt = new DateWithZone(new Date(Date.UTC(2010, 9, 5, 11, 0, 0)), 'Asia/Tokyo')
-    expect(dt.toString()).to.equal(';TIMZONE=Asia/Tokyo:20101005T110000')
+    expect(dt.toString()).to.equal(';TIMEZONE=Asia/Tokyo:20101005T110000')
   })
 })
 

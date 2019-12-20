@@ -17,7 +17,7 @@ export class DateWithZone {
   public toString() {
     const datestr = dateutil.timeToUntilString(this.date.getTime(), this.isUTC)
     if (!this.isUTC) {
-      return `;TIMZONE=${this.timezone}:${datestr}`
+      return `;TIMEZONE=${this.timezone}:${datestr}`
     }
 
     return `:${datestr}`
@@ -41,7 +41,7 @@ export class DateWithZone {
       return rezoned.toJSDate()
     } catch (e) {
       if (e instanceof TypeError) {
-        console.error('Using TIMZONE without Luxon available is unsupported. Returned times are in UTC, not the requested time zone')
+        console.error('Using TIMEZONE without Luxon available is unsupported. Returned times are in UTC, not the requested time zone')
       }
       return this.date
     }

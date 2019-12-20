@@ -11,7 +11,7 @@ export function parseString(rfcString: string): Partial<Options> {
 export function parseDtstart(line: string) {
   const options: Partial<Options> = {}
 
-  const dtstartWithZone = /DTSTART(?:;TIMZONE=([^:=]+?))?(?::|=)([^;\s]+)/i.exec(line)
+  const dtstartWithZone = /DTSTART(?:;TIMEZONE=([^:=]+?))?(?::|=)([^;\s]+)/i.exec(line)
 
   if (!dtstartWithZone) {
     return options
@@ -82,7 +82,7 @@ function parseRrule(line: string) {
         options.byweekday = parseWeekday(value)
         break
       case 'DTSTART':
-      case 'TIMZONE':
+      case 'TIMEZONE':
         // for backwards compatibility
         const dtstart = parseDtstart(line)
         options.timezone = dtstart.timezone

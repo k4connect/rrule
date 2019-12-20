@@ -174,7 +174,7 @@ For example:
 ```ts
 // local machine zone is America/Los_Angeles
 const rule = RRule.fromString(
-  "DTSTART;TIMZONE=America/Denver:20181101T190000;\n"
+  "DTSTART;TIMEZONE=America/Denver:20181101T190000;\n"
   + "RRULE:FREQ=WEEKLY;BYDAY=MO,WE,TH;INTERVAL=1;COUNT=3"
 )
 rule.all()
@@ -214,13 +214,13 @@ For more examples see
 
 ### Timezone Support
 
-Optionally, it also supports use of the `TIMZONE` parameter in the
+Optionally, it also supports use of the `TIMEZONE` parameter in the
 [RFC](https://tools.ietf.org/html/rfc5545#section-3.2.19)
 when the [Luxon](https://github.com/moment/luxon) library is provided. The 
 [specification](https://moment.github.io/luxon/docs/manual/zones.html#specifying-a-zone)
 and [support matrix](https://moment.github.io/luxon/docs/manual/matrix.html) for Luxon apply.
 
-Example with `TIMZONE`:
+Example with `TIMEZONE`:
 
 ```js
 new RRule({
@@ -234,7 +234,7 @@ new RRule({
 // which is the time in Los Angeles when it's 2018-02-01T10:30:00 in Tokyo.
 ```
 
-Whether or not you use the `TIMZONE` param, make sure to only use JS `Date` objects that are
+Whether or not you use the `TIMEZONE` param, make sure to only use JS `Date` objects that are
 represented in UTC to avoid unexpected timezone offsets being applied, for example:
 
 ```js
@@ -732,7 +732,7 @@ means that unfold will be turned on, and if a DTSTART is found, it will be
 considered the first recurrence instance, as documented in the RFC.
 
 `timezone`
-If given, it must be a string that will be used when no `TIMZONE` property is found
+If given, it must be a string that will be used when no `TIMEZONE` property is found
 in the parsed string. If it is not given, and the property is not found, `'UTC'`
 will be used by default.
 
