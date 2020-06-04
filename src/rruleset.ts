@@ -7,7 +7,7 @@ import { QueryMethodTypes, IterResultType } from './types'
 import { rrulestr } from './rrulestr'
 import { optionsToString } from './optionstostring'
 
-function createGetterSetter<T>(fieldName: string) {
+function createGetterSetter<T> (fieldName: string) {
   return (field?: T) => {
     if (field !== undefined) {
       this[`_${fieldName}`] = field
@@ -41,7 +41,7 @@ export default class RRuleSet extends RRule {
    *  The same stratagy as RRule on cache, default to false
    * @constructor
    */
-  constructor(noCache: boolean = false) {
+  constructor (noCache: boolean = false) {
     super({}, noCache)
 
     this._rrule = []
@@ -53,7 +53,7 @@ export default class RRuleSet extends RRule {
   dtstart = createGetterSetter.apply(this, ['dtstart'])
   timezone = createGetterSetter.apply(this, ['timezone'])
 
-  _iter<M extends QueryMethodTypes>(iterResult: IterResult<M>): IterResultType<M> {
+  _iter<M extends QueryMethodTypes> (iterResult: IterResult<M>): IterResultType<M> {
     return iterSet(
       iterResult,
       this._rrule,
@@ -69,7 +69,7 @@ export default class RRuleSet extends RRule {
    *
    * @param {RRule}
    */
-  rrule(rrule: RRule) {
+  rrule (rrule: RRule) {
     _addRule(rrule, this._rrule)
   }
 
@@ -78,7 +78,7 @@ export default class RRuleSet extends RRule {
    *
    * @param {RRule}
    */
-  exrule(rrule: RRule) {
+  exrule (rrule: RRule) {
     _addRule(rrule, this._exrule)
   }
 
@@ -87,7 +87,7 @@ export default class RRuleSet extends RRule {
    *
    * @param {Date}
    */
-  rdate(date: Date) {
+  rdate (date: Date) {
     _addDate(date, this._rdate)
   }
 
@@ -96,7 +96,7 @@ export default class RRuleSet extends RRule {
    *
    * @param {Date}
    */
-  exdate(date: Date) {
+  exdate (date: Date) {
     _addDate(date, this._exdate)
   }
 
@@ -105,7 +105,7 @@ export default class RRuleSet extends RRule {
    *
    * @return List of rrules
    */
-  rrules() {
+  rrules () {
     return this._rrule.map(e => rrulestr(e.toString()))
   }
 
@@ -114,7 +114,7 @@ export default class RRuleSet extends RRule {
    *
    * @return List of exrules
    */
-  exrules() {
+  exrules () {
     return this._exrule.map(e => rrulestr(e.toString()))
   }
 
@@ -123,7 +123,7 @@ export default class RRuleSet extends RRule {
    *
    * @return List of rdates
    */
-  rdates() {
+  rdates () {
     return this._rdate.map(e => new Date(e.getTime()))
   }
 
@@ -132,11 +132,11 @@ export default class RRuleSet extends RRule {
    *
    * @return List of exdates
    */
-  exdates() {
+  exdates () {
     return this._exdate.map(e => new Date(e.getTime()))
   }
 
-  valueOf() {
+  valueOf () {
     let result: string[] = []
 
     if (!this._rrule.length && this._dtstart) {
@@ -176,14 +176,14 @@ export default class RRuleSet extends RRule {
    *   RRULE:FREQ=YEARLY;COUNT=2;BYDAY=TU
    *   RRULE:FREQ=YEARLY;COUNT=1;BYDAY=TH
    */
-  toString() {
+  toString () {
     return this.valueOf().join('\n')
   }
 
   /**
    * Create a new RRuleSet Object completely base on current instance
    */
-  clone(): RRuleSet {
+  clone (): RRuleSet {
     const rrs = new RRuleSet(!!this._cache)
 
     this._rrule.forEach(rule => rrs.rrule(rule.clone()))
@@ -195,7 +195,7 @@ export default class RRuleSet extends RRule {
   }
 }
 
-function _addRule(rrule: RRule, collection: RRule[]) {
+function _addRule (rrule: RRule, collection: RRule[]) {
   if (!(rrule instanceof RRule)) {
     throw new TypeError(String(rrule) + ' is not RRule instance')
   }
@@ -205,7 +205,7 @@ function _addRule(rrule: RRule, collection: RRule[]) {
   }
 }
 
-function _addDate(date: Date, collection: Date[]) {
+function _addDate (date: Date, collection: Date[]) {
   if (!(date instanceof Date)) {
     throw new TypeError(String(date) + ' is not Date instance')
   }
@@ -215,7 +215,7 @@ function _addDate(date: Date, collection: Date[]) {
   }
 }
 
-function rdatesToString(param: string, rdates: Date[], timezone: string | undefined) {
+function rdatesToString (param: string, rdates: Date[], timezone: string | undefined) {
   const isUTC = !timezone || timezone.toUpperCase() === 'UTC'
   const header = isUTC ? `${param}:` : `${param};TIMEZONE=${timezone}:`
 

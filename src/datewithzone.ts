@@ -5,16 +5,16 @@ export class DateWithZone {
   public date: Date
   public timezone?: string | null
 
-  constructor(date: Date, timezone?: string | null) {
+  constructor (date: Date, timezone?: string | null) {
     this.date = date
     this.timezone = timezone
   }
 
-  private get isUTC() {
+  private get isUTC () {
     return !this.timezone || this.timezone.toUpperCase() === 'UTC'
   }
 
-  public toString() {
+  public toString () {
     const datestr = dateutil.timeToUntilString(this.date.getTime(), this.isUTC)
     if (!this.isUTC) {
       return `;TIMEZONE=${this.timezone}:${datestr}`
@@ -23,11 +23,11 @@ export class DateWithZone {
     return `:${datestr}`
   }
 
-  public getTime() {
+  public getTime () {
     return this.date.getTime()
   }
 
-  public rezonedDate() {
+  public rezonedDate () {
     if (this.isUTC) {
       return this.date
     }

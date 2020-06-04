@@ -3,12 +3,12 @@ import { Weekday } from './weekday'
 import dateutil from './dateutil'
 import { Days } from './rrule'
 
-export function parseString(rfcString: string): Partial<Options> {
+export function parseString (rfcString: string): Partial<Options> {
   const options = rfcString.split('\n').map(parseLine).filter(x => x !== null)
   return { ...options[0], ...options[1] }
 }
 
-export function parseDtstart(line: string) {
+export function parseDtstart (line: string) {
   const options: Partial<Options> = {}
 
   const dtstartWithZone = /DTSTART(?:;TIMEZONE=([^:=]+?))?(?::|=)([^;\s]+)/i.exec(line)
@@ -26,7 +26,7 @@ export function parseDtstart(line: string) {
   return options
 }
 
-function parseLine(rfcString: string) {
+function parseLine (rfcString: string) {
   rfcString = rfcString.replace(/^\s+|\s+$/, '')
   if (!rfcString.length) return null
 
@@ -47,7 +47,7 @@ function parseLine(rfcString: string) {
   }
 }
 
-function parseRrule(line: string) {
+function parseRrule (line: string) {
   const strippedLine = line.replace(/^RRULE:/i, '')
   const options = parseDtstart(strippedLine)
 
@@ -105,7 +105,7 @@ function parseRrule(line: string) {
   return options
 }
 
-function parseNumber(value: string) {
+function parseNumber (value: string) {
   if (value.indexOf(',') !== -1) {
     const values = value.split(',')
     return values.map(parseIndividualNumber)
@@ -114,7 +114,7 @@ function parseNumber(value: string) {
   return parseIndividualNumber(value)
 }
 
-function parseIndividualNumber(value: string) {
+function parseIndividualNumber (value: string) {
   if (/^[+-]?\d+$/.test(value)) {
     return Number(value)
   }
@@ -122,7 +122,7 @@ function parseIndividualNumber(value: string) {
   return value
 }
 
-function parseWeekday(value: string) {
+function parseWeekday (value: string) {
   const days = value.split(',')
 
   return days.map(day => {
